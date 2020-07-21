@@ -8,8 +8,11 @@ class App extends React.Component {
     super();
     this.state = {
       movies: moviesData,
+      moviesWillWatch: [],
     };
     this.removeMovie = this.removeMovie.bind(this);
+    this.addMovieToWillWatch = this.addMovieToWillWatch.bind(this);
+    this.removeMovieFromWillWatch = this.removeMovieFromWillWatch.bind(this);
   }
 
   removeMovie(movie) {
@@ -20,19 +23,51 @@ class App extends React.Component {
     });
   }
 
+  addMovieToWillWatch(movie) {
+    const { moviesWillWatch } = this.state;
+    const updateMovies = [...moviesWillWatch, movie];
+    this.setState({
+      moviesWillWatch: updateMovies,
+    });
+  }
+
+  removeMovieFromWillWatch(movie) {
+    const { moviesWillWatch } = this.state;
+    const updateMovies = moviesWillWatch.filter((item) => item.id !== movie.id);
+    this.setState({
+      moviesWillWatch: updateMovies,
+    });
+  }
+
   render() {
-    const { movies } = this.state;
+    const { movies, moviesWillWatch } = this.state;
     return (
-      <div>
-        {
-          movies.map((movie) => (
-            <MovieItem
-              key={movie.id}
-              movie={movie}
-              removeMovie={this.removeMovie}
-            />
-          ))
-        }
+      <div className="container">
+        <div className="row">
+          <div className="col-9">
+            <div className="row">
+              {
+                movies.map((movie) => (
+                  <div className="col-6 mb-4" key={movie.id}>
+                    <MovieItem
+                      movie={movie}
+                      removeMovie={this.removeMovie}
+                      addMovieToWillWatch={this.addMovieToWillWatch}
+                      removeMovieFromWillWatch={this.removeMovieFromWillWatch}
+                    />
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+          <div className="col-3">
+            <p>
+              Will Watch:
+              {' '}
+              {moviesWillWatch.length}
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
