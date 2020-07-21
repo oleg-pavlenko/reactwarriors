@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import MovieTabs from './components/MovieTabs';
 import MovieItem from './components/MovieItem';
 
 class App extends React.Component {
@@ -8,20 +9,36 @@ class App extends React.Component {
     this.state = {
       movies: [],
       moviesWillWatch: [],
+      sortBy: 'popularity.desc',
     };
     this.removeMovie = this.removeMovie.bind(this);
     this.addMovieToWillWatch = this.addMovieToWillWatch.bind(this);
     this.removeMovieFromWillWatch = this.removeMovieFromWillWatch.bind(this);
+    this.handleSort = this.handleSort.bind(this);
   }
 
   componentDidMount() {
-    fetch('https://api.themoviedb.org/3/discover/movie?api_key=3f4ca4f3a9750da53450646ced312397')
+    const { sortBy } = this.state;
+    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=3f4ca4f3a9750da53450646ced312397&sort_by=${sortBy}`)
       .then((response) => response.json())
       .then((data) => {
         this.setState({
           movies: data.results,
         });
       });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { sortBy } = this.state;
+    if (prevState.sortBy !== sortBy) {
+      fetch(`https://api.themoviedb.org/3/discover/movie?api_key=3f4ca4f3a9750da53450646ced312397&sort_by=${sortBy}`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({
+            movies: data.results,
+          });
+        });
+    }
   }
 
   removeMovie(movie) {
@@ -48,12 +65,21 @@ class App extends React.Component {
     });
   }
 
+  handleSort(value) {
+    this.setState({
+      sortBy: value,
+    });
+  }
+
   render() {
-    const { movies, moviesWillWatch } = this.state;
+    const { movies, moviesWillWatch, sortBy } = this.state;
     return (
       <div className="container">
         <div className="row">
           <div className="col-9">
+            <div className="row mb-4">
+              <MovieTabs sortBy={sortBy} handleSort={this.handleSort} />
+            </div>
             <div className="row">
               {
                 movies.map((movie) => (
