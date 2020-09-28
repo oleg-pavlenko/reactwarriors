@@ -12,7 +12,7 @@ class MovieItem extends React.Component {
   render() {
     const { willWatch } = this.state;
     const {
-      movie, removeMovie, addMovieToWillWatch, removeMovieFromWillWatch,
+      movie, addMovieToWillWatch, removeMovieFromWillWatch,
     } = this.props;
     return (
       <div className="card">
@@ -58,9 +58,6 @@ class MovieItem extends React.Component {
                 </button>
               )
             }
-            <button type="button" onClick={() => removeMovie(movie)}>
-              Delete Movie
-            </button>
           </div>
         </div>
       </div>
@@ -75,7 +72,6 @@ MovieItem.propTypes = {
     poster_path: PropTypes.string,
     vote_average: PropTypes.number.isRequired,
   }).isRequired,
-  removeMovie: PropTypes.func.isRequired,
   addMovieToWillWatch: PropTypes.func.isRequired,
   removeMovieFromWillWatch: PropTypes.func.isRequired,
 };

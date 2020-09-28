@@ -13,7 +13,6 @@ class App extends React.Component {
       sortBy: 'popularity.desc',
       currentPage: 1,
     };
-    this.removeMovie = this.removeMovie.bind(this);
     this.addMovieToWillWatch = this.addMovieToWillWatch.bind(this);
     this.removeMovieFromWillWatch = this.removeMovieFromWillWatch.bind(this);
     this.handleSort = this.handleSort.bind(this);
@@ -54,14 +53,6 @@ class App extends React.Component {
           });
         });
     }
-  }
-
-  removeMovie(movie) {
-    const { movies } = this.state;
-    const updateMovies = movies.filter((item) => item.id !== movie.id);
-    this.setState({
-      movies: updateMovies,
-    });
   }
 
   addMovieToWillWatch(movie) {
@@ -127,7 +118,6 @@ class App extends React.Component {
                   <div className="col-6 mb-4" key={movie.id}>
                     <MovieItem
                       movie={movie}
-                      removeMovie={this.removeMovie}
                       addMovieToWillWatch={this.addMovieToWillWatch}
                       removeMovieFromWillWatch={this.removeMovieFromWillWatch}
                     />
@@ -135,7 +125,7 @@ class App extends React.Component {
                 ))
               }
             </div>
-            <div className="row">
+            <div className="row pagination">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
